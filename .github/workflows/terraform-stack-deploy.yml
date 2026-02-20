@@ -1,0 +1,105 @@
+name: Customer Environment Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      client_name:
+        description: "Client Name (folder under customer-environments)"
+        required: true
+        type: string
+      aws_account_id:
+        description: "AWS Account ID"
+        required: true
+        type: string
+      aws_region:
+        description: "AWS Region"
+        required: true
+        default: us-east-1
+        type: string
+
+jobs:
+
+  terraform-plan:
+    name: Terraform Plan
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::${{ inputs.aws_account_id }}:role/githubActionRoleForFiftyfive
+          aws-region: ${{ inputs.aws_region }}
+
+      - uses: hashicorp/setup-terraform@v3
+
+      # 🔥 Create Symlink
+      - name: Symlink tfvars into aws-infra-template/deploy-customer-stack
+        run: |
+          ln -sf ../../customer-environments/${{ inputs.client_name }}/terraform.tfvars aws-infra-template/deploy-customer-stack/terraform.tfvars
+
+      # 🔥 Terraform Init with backend.hcl
+      - name: Terraform Init
+        working-directory: aws-infra-template/deploy-customer-stack
+        run: |
+          terraform init \
+            -backend-config=../customer-environments/${{ inputs.client_name }}/backend.hcl
+
+      - name: Terraform Plan
+        working-directory: aws-infra-template/deploy-customer-stack
+        run: terraform plan -var-file=terraform.tfvars -out=tfplan
+
+      - name: Upload Plan Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: tfplan
+          path: aws-infra-template/deploy-customer-stack/tfplan
+
+
+  terraform-apply:
+    name: Terraform Apply
+    runs-on: ubuntu-latest
+    needs: terraform-plan
+
+    environment:
+      name: production   # approval gate
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: tfplan
+          path: aws-infra-template/deploy-customer-stack
+
+      - name: Configure AWS Credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::${{ inputs.aws_account_id }}:role/githubActionRoleForFiftyfive
+          aws-region: ${{ inputs.aws_region }}
+
+      - uses: hashicorp/setup-terraform@v3
+
+      - name: Symlink tfvars again
+        run: |
+          ln -sf ../../customer-environments/${{ inputs.client_name }}/terraform.tfvars aws-infra-template/deploy-customer-stack/terraform.tfvars
+
+      - name: Terraform Init
+        working-directory: aws-infra-template/deploy-customer-stack
+        run: |
+          terraform init \
+            -backend-config=../customer-environments/${{ inputs.client_name }}/backend.hcl
+
+      - name: Terraform Apply
+        working-directory: aws-infra-template/deploy-customer-stack
+        run: terraform apply -auto-approve tfplan
+        

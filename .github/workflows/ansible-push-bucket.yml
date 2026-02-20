@@ -1,0 +1,39 @@
+name: Sync Ansible Folder to S3
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'ansible/**'   # Only run if ansible folder changes
+
+jobs:
+  sync:
+    name: Sync Ansible to S3
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+
+    env:
+      AWS_REGION: us-east-1
+      S3_BUCKET: my-config-bucket
+      S3_PREFIX: ansible-config
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::<YOUR_ACCOUNT_ID>:role/github-s3-sync-role
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Sync Ansible Folder to S3
+        run: |
+          aws s3 sync ansible/playbooks/ \
+            s3://${{ env.S3_BUCKET }}/${{ env.S3_PREFIX }}/ \
+            --delete
+            
