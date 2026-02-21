@@ -20,9 +20,9 @@ output "nat_gateway_ids" {
 ####  load balancer
 
 output "public_alb_dns" {
-  value = aws_lb.public_alb.dns_name
+  value = module.stack_ec2.public_alb_dns
 }
 
 output "internal_alb_dns" {
-  value = aws_lb.internal_alb.dns_name
+  value = module.stack_ec2.internal_alb_dns
 }
