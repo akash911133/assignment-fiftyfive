@@ -17,22 +17,24 @@ env:
   AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
 
 jobs:
-  detect-changes:
-    runs-on: ubuntu-latest
-    outputs:
-      frontend_changed: ${{ steps.filter.outputs.frontend }}
-      backend_changed: ${{ steps.filter.outputs.backend }}
-    steps:
-      - uses: actions/checkout@v4
+detect-changes:
+  runs-on: ubuntu-latest
+  outputs:
+    frontend_changed: ${{ steps.filter.outputs.frontend }}
+    backend_changed: ${{ steps.filter.outputs.backend }}
+  steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
 
-      - uses: dorny/paths-filter@v3
-        id: filter
-        with:
-          filters: |
-            frontend:
-              - 'image/frontend-im/**'
-            backend:
-              - 'image/backend-im/**'
+    - uses: dorny/paths-filter@v3
+      id: filter
+      with:
+        filters: |
+          frontend:
+            - 'images/frontend-im/**'
+          backend:
+            - 'images/backend-im/**'
 
   build-frontend:
     needs: detect-changes
