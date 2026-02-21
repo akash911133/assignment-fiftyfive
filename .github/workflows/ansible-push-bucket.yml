@@ -18,7 +18,6 @@ jobs:
 
     env:
       AWS_REGION: us-east-1
-      S3_BUCKET: my-config-bucket
       S3_PREFIX: ansible-config
 
     steps:
@@ -28,12 +27,11 @@ jobs:
       - name: Configure AWS Credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::<YOUR_ACCOUNT_ID>:role/github-s3-sync-role
+          role-to-assume: arn:aws:iam::<YOUR_ACCOUNT_ID>:role/githubActionRoleForFiftyfive
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Sync Ansible Folder to S3
         run: |
-          aws s3 sync ansible/playbooks/ \
-            s3://${{ env.S3_BUCKET }}/${{ env.S3_PREFIX }}/ \
+          aws s3 sync ansible/  s3://${{ secrets.S3_BUCKET_NAME }}/${{ env.S3_PREFIX }}/ \
             --delete
             

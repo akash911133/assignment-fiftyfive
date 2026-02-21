@@ -9,6 +9,13 @@ resource "aws_security_group" "backend_sg" {
     security_groups = [aws_security_group.frontend_sg.id]
   }
 
+  ingress {
+    from_port       = 22
+    to_port         = 22
+    protocol        = "ssh"
+    security_groups = [aws_security_group.frontend_sg.id]
+  }
+
   egress {
     from_port   = 0
     to_port     = 0
@@ -48,7 +55,9 @@ resource "aws_launch_template" "backend_lt" {
   iam_instance_profile {
     name = aws_iam_instance_profile.ec2_profile.name
   }
-
+  
+  key_name = aws_key_pair.my-key.key_name
+  
   network_interfaces {
     associate_public_ip_address = false
     security_groups             = [aws_security_group.backend_sg.id]
