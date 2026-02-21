@@ -13,7 +13,7 @@ permissions:
   contents: read
 
 env:
-  AWS_REGION: ${{ secrets.AWS_REGION }}
+  AWS_REGION: "eu-west-1"
   AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
 
 jobs:
@@ -38,6 +38,9 @@ jobs:
     needs: detect-changes
     if: needs.detect-changes.outputs.frontend_changed == 'true'
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: image/frontend-im
 
     steps:
       - uses: actions/checkout@v4
@@ -56,19 +59,19 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build \
-            -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/app-frontend:$SHORT_SHA \
-            image/frontend-im
+          docker build -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/app-frontend:$SHORT_SHA  .
 
       - name: Push Docker image
         run: |
-          docker push \
-            $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/app-frontend:$SHORT_SHA
+          docker push  $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/app-frontend:$SHORT_SHA
 
   build-backend:
     needs: detect-changes
     if: needs.detect-changes.outputs.backend_changed == 'true'
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: image/backend-im
 
     steps:
       - uses: actions/checkout@v4
@@ -87,11 +90,8 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build \
-            -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/app-backend:$SHORT_SHA \
-            image/backend
+          docker build -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/app-backend:$SHORT_SHA .
 
       - name: Push Docker image
         run: |
-          docker push \
-            $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/app-backend:$SHORT_SHA
+          docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/app-backend:$SHORT_SHA
