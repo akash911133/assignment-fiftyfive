@@ -1,4 +1,4 @@
-bucket         = "terraform-aws-infra-statebucket"
+bucket         = "aws-platform-infra-bucket"
 key            = "tfstate/ClientA/terraform.tfstate"
 region         = "us-east-1"
 dynamodb_table = "terraform-lock-table"
