@@ -78,7 +78,7 @@ resource "aws_lb_listener" "public_listener" {
 ###########
 
 resource "aws_launch_template" "frontend_lt" {
-  name_prefix   = "${var.client_name}-frontend-"
+  name_prefix   = "${var.client_name}-frontend"
   image_id      = var.ami_id
   instance_type = var.instance_type
 
@@ -102,7 +102,7 @@ resource "aws_autoscaling_group" "frontend_asg" {
   desired_capacity    = 1
   min_size            = 1
   max_size            = 3
-  vpc_zone_identifier = var.public_subnet_ids
+  vpc_zone_identifier = var.private_subnet_ids
 
   launch_template {
     id      = aws_launch_template.frontend_lt.id
