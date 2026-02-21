@@ -35,3 +35,15 @@ variable "private_subnet_cidrs" {
   description = "Private subnet CIDRs"
   type        = list(string)
 }
+
+
+#####################  ec2 
+
+variable "ami_id" {
+  type = string
+}
+
+variable "instance_type" {
+  type    = string
+  default = "t3.micro"
+}

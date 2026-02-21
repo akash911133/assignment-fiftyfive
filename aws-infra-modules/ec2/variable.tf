@@ -1,44 +1,35 @@
-variable "name" {
-  type = string
+variable "aws_region" {
+  description = "AWS region"
+  type        = string
+}
+
+variable "client_name" {
+  description = "Client Name"
+  type        = string
+}
+
+variable "client_environment" {
+  description = "Environment (dev/prod)"
+  type        = string
 }
 
 variable "vpc_id" {
   type = string
 }
 
-variable "public_subnets" {
+variable "public_subnet_ids" {
   type = list(string)
 }
 
-variable "private_subnets" {
+variable "private_subnet_ids" {
   type = list(string)
-}
-
-variable "frontend_sg_id" {
-  type = string
-}
-
-variable "backend_sg_id" {
-  type = string
-}
-
-variable "public_alb_sg_id" {
-  type = string
-}
-
-variable "internal_alb_sg_id" {
-  type = string
-}
-
-variable "frontend_ami" {
-  type = string
-}
-
-variable "backend_ami" {
-  type = string
 }
 
 variable "instance_type" {
   type    = string
   default = "t3.micro"
+}
+
+variable "ami_id" {
+  type = string
 }

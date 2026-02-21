@@ -16,3 +16,13 @@ output "private_subnet_ids" {
 output "nat_gateway_ids" {
   value = module.stack_vpc.nat_gateway_ids
 }
+
+####  load balancer
+
+output "public_alb_dns" {
+  value = aws_lb.public_alb.dns_name
+}
+
+output "internal_alb_dns" {
+  value = aws_lb.internal_alb.dns_name
+}
