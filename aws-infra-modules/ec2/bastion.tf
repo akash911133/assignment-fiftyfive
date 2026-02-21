@@ -38,13 +38,14 @@ resource "aws_security_group" "my-bastion-sg" {
         cidr_blocks = ["0.0.0.0/0"]
     }
 }
-
 resource "aws_instance" "my-bastion-instance" {
-  ami = var.ami_id
-  instance_type = var.instance_type
-  key_name = aws_key_pair.my-key.key_name
-  subnet_id = var.public_subnet_ids[0]
-  security_groups = [aws_security_group.my-bastion-sg.name]
+  ami                    = var.ami_id
+  instance_type          = var.instance_type
+  key_name               = aws_key_pair.my-key.key_name
+  subnet_id              = var.public_subnet_ids[0]
+  vpc_security_group_ids = [aws_security_group.my-bastion-sg.id]
+
+  associate_public_ip_address = true   # optional but recommended for bastion
 
   root_block_device {
     volume_size = 15
