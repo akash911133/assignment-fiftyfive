@@ -17,24 +17,24 @@ env:
   AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
 
 jobs:
-detect-changes:
-  runs-on: ubuntu-latest
-  outputs:
-    frontend_changed: ${{ steps.filter.outputs.frontend }}
-    backend_changed: ${{ steps.filter.outputs.backend }}
-  steps:
-    - uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
+  detect-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      frontend_changed: ${{ steps.filter.outputs.frontend }}
+      backend_changed: ${{ steps.filter.outputs.backend }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-    - uses: dorny/paths-filter@v3
-      id: filter
-      with:
-        filters: |
-          frontend:
-            - 'images/frontend-im/**'
-          backend:
-            - 'images/backend-im/**'
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            frontend:
+              - 'images/frontend-im/**'
+            backend:
+              - 'images/backend-im/**'
 
   build-frontend:
     needs: detect-changes
@@ -42,7 +42,7 @@ detect-changes:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: image/frontend-im
+        working-directory: images/frontend-im
 
     steps:
       - uses: actions/checkout@v4
@@ -53,19 +53,16 @@ detect-changes:
           role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/githubActionRoleForFiftyfive
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Login to ECR
-        uses: aws-actions/amazon-ecr-login@v2
+      - uses: aws-actions/amazon-ecr-login@v2
 
       - name: Set short SHA
         run: echo "SHORT_SHA=${GITHUB_SHA::7}" >> $GITHUB_ENV
 
       - name: Build Docker image
-        run: |
-          docker build -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/app-frontend:$SHORT_SHA  .
+        run: docker build -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/app-frontend:$SHORT_SHA .
 
       - name: Push Docker image
-        run: |
-          docker push  $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/app-frontend:$SHORT_SHA
+        run: docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/app-frontend:$SHORT_SHA
 
   build-backend:
     needs: detect-changes
@@ -73,7 +70,7 @@ detect-changes:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: image/backend-im
+        working-directory: images/backend-im
 
     steps:
       - uses: actions/checkout@v4
@@ -84,16 +81,13 @@ detect-changes:
           role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/githubActionRoleForFiftyfive
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Login to ECR
-        uses: aws-actions/amazon-ecr-login@v2
+      - uses: aws-actions/amazon-ecr-login@v2
 
       - name: Set short SHA
         run: echo "SHORT_SHA=${GITHUB_SHA::7}" >> $GITHUB_ENV
 
       - name: Build Docker image
-        run: |
-          docker build -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/app-backend:$SHORT_SHA .
+        run: docker build -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/app-backend:$SHORT_SHA .
 
       - name: Push Docker image
-        run: |
-          docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/app-backend:$SHORT_SHA
+        run: docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/app-backend:$SHORT_SHA
