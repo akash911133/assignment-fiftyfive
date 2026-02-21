@@ -24,6 +24,6 @@ ami_id = "ami-03446a3af42c5e74e"
 
 instance_type = "t2.micro"
 
-front_image_tag = "1.2.3"
-backend_image_tag = "1.5.3"
+front_image_tag = "53fefc0"
+backend_image_tag = "53fefc0"
 
