@@ -1,7 +1,9 @@
 FROM node:18
+
 WORKDIR /app
 
 COPY Expense_with_healthcheck/backend/package*.json ./
+
 RUN npm install
 
 COPY Expense_with_healthcheck/backend/ .
