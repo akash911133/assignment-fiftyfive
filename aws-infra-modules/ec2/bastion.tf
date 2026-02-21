@@ -12,7 +12,7 @@ resource "aws_key_pair" "my-key" {
 resource "aws_security_group" "my-bastion-sg" {
     name = "MyBastionSG"
     description = "this is creating for deploying httpd server"
-    vpc_id = aws_vpc.this.id
+    vpc_id = var.vpc_id
 
     ingress {
         description = "port 22 for ssh access"
