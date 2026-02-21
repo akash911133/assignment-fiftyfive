@@ -1,5 +1,5 @@
 module "stack_vpc" {
-    source  =  "../../aws/infra-module/vpc"
+    source  =  "../../aws-infra-modules/vpc"
 
     client_name  = var.client_name
     client_environment = var.client_environment

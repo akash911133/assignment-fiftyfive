@@ -48,7 +48,7 @@ jobs:
         working-directory: aws-infra-template/deploy-customer-stack
         run: |
           terraform init \
-            -backend-config=../customer-environments/${{ inputs.client_name }}/backend.hcl
+            -backend-config=../../customer-environments/${{ inputs.client_name }}/backend.hcl
 
       - name: Terraform Plan
         working-directory: aws-infra-template/deploy-customer-stack
@@ -97,7 +97,7 @@ jobs:
         working-directory: aws-infra-template/deploy-customer-stack
         run: |
           terraform init \
-            -backend-config=../customer-environments/${{ inputs.client_name }}/backend.hcl
+            -backend-config=../../customer-environments/${{ inputs.client_name }}/backend.hcl
 
       - name: Terraform Apply
         working-directory: aws-infra-template/deploy-customer-stack
