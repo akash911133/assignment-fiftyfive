@@ -5,8 +5,8 @@ on:
     branches:
       - main
     paths:
-      - 'image/frontend-im/**'
-      - 'image/backend-im/**'
+      - 'images/frontend-im/**'
+      - 'images/backend-im/**'
 
 permissions:
   id-token: write
