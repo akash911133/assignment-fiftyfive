@@ -6,16 +6,6 @@ resource "aws_security_group" "backend_sg" {
   name   = "${var.client_name}-backend-sg"
   vpc_id = var.vpc_id
 
-  # Allow backend traffic ONLY from internal ALB
-  ingress {
-    description     = "Allow backend traffic from internal ALB"
-    from_port       = 5000
-    to_port         = 5000
-    protocol        = "tcp"
-    security_groups = [aws_security_group.internal_alb_sg.id]
-  }
-
-  # SSH (restrict to your IP in real production)
   ingress {
     description = "SSH access"
     from_port   = 22
@@ -40,22 +30,36 @@ resource "aws_security_group" "internal_alb_sg" {
   name   = "${var.client_name}-internal-alb-sg"
   vpc_id = var.vpc_id
 
-  # Allow traffic from frontend only
-  ingress {
-    description     = "Allow traffic from frontend"
-    from_port       = 5000
-    to_port         = 5000
-    protocol        = "tcp"
-    security_groups = [aws_security_group.frontend_sg.id]
-  }
-
-  # Allow traffic to backend
   egress {
-    from_port       = 5000
-    to_port         = 5000
-    protocol        = "tcp"
-    security_groups = [aws_security_group.backend_sg.id]
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
+}
+
+############################
+# SECURITY GROUP RULES (BREAKS CYCLE)
+############################
+
+# Allow Frontend → ALB (5000)
+resource "aws_security_group_rule" "alb_allow_frontend" {
+  type                     = "ingress"
+  from_port                = 5000
+  to_port                  = 5000
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.internal_alb_sg.id
+  source_security_group_id = aws_security_group.frontend_sg.id
+}
+
+# Allow ALB → Backend (5000)
+resource "aws_security_group_rule" "backend_allow_alb" {
+  type                     = "ingress"
+  from_port                = 5000
+  to_port                  = 5000
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.backend_sg.id
+  source_security_group_id = aws_security_group.internal_alb_sg.id
 }
 
 ############################
@@ -82,7 +86,7 @@ resource "aws_lb_target_group" "backend_tg" {
 
   health_check {
     path                = "/health"
-    port                = "5000"
+    port                = "traffic-port"
     protocol            = "HTTP"
     healthy_threshold   = 2
     unhealthy_threshold = 3
