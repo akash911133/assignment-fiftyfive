@@ -7,7 +7,7 @@ resource "aws_vpc" "this" {
   enable_dns_support   = true
 
   tags = {
-    Name = "${var.name}-vpc"
+    Name = "${var.client_name}-vpc"
   }
 }
 
@@ -22,7 +22,7 @@ resource "aws_subnet" "public" {
   map_public_ip_on_launch = true
 
   tags = {
-    Name = "${var.name}-public-${count.index + 1}"
+    Name = "${var.client_name}-public-${count.index + 1}"
   }
 }
 
@@ -36,6 +36,6 @@ resource "aws_subnet" "private" {
   availability_zone = var.azs[count.index]
 
   tags = {
-    Name = "${var.name}-private-${count.index + 1}"
+    Name = "${var.client_name}-private-${count.index + 1}"
   }
 }

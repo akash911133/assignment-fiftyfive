@@ -5,7 +5,7 @@ resource "aws_internet_gateway" "this" {
   vpc_id = aws_vpc.this.id
 
   tags = {
-    Name = "${var.name}-igw"
+    Name = "${var.client_name}-igw"
   }
 }
 
@@ -17,7 +17,7 @@ resource "aws_eip" "nat" {
   domain = "vpc"
 
   tags = {
-    Name = "${var.name}-nat-eip-${count.index + 1}"
+    Name = "${var.client_name}-nat-eip-${count.index + 1}"
   }
 }
 
@@ -32,6 +32,6 @@ resource "aws_nat_gateway" "this" {
   depends_on = [aws_internet_gateway.this]
 
   tags = {
-    Name = "${var.name}-nat-${count.index + 1}"
+    Name = "${var.client_name}-nat-${count.index + 1}"
   }
 }

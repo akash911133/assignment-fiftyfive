@@ -1,8 +1,3 @@
-variable "name" {
-  description = "Project or client name"
-  type        = string
-}
-
 variable "vpc_cidr" {
   description = "VPC CIDR block"
   type        = string
@@ -21,4 +16,20 @@ variable "public_subnet_cidrs" {
 variable "private_subnet_cidrs" {
   description = "Private subnet CIDRs"
   type        = list(string)
+}
+
+###########################################################
+variable "aws_region" {
+  description = "AWS region"
+  type        = string
+}
+
+variable "client_name" {
+  description = "Client Name"
+  type        = string
+}
+
+variable "client_environment" {
+  description = "Environment (dev/prod)"
+  type        = string
 }

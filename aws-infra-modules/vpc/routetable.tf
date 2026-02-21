@@ -10,7 +10,7 @@ resource "aws_route_table" "public" {
   }
 
   tags = {
-    Name = "${var.name}-public-rt"
+    Name = "${var.client_name}-public-rt"
   }
 }
 
@@ -34,7 +34,7 @@ resource "aws_route_table" "private" {
   }
 
   tags = {
-    Name = "${var.name}-private-rt-${count.index + 1}"
+    Name = "${var.client_name}-private-rt-${count.index + 1}"
   }
 }
 
