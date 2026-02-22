@@ -24,6 +24,11 @@ ami_id = "ami-03446a3af42c5e74e"
 
 instance_type = "t2.micro"
 
-front_image_tag = "1.2.3"
-backend_image_tag = "1.5.3"
+#### S3 variables for Ansible ##########
+s3_bucket_name = "aws-platform-infra-bucket"
+
+#### AWS Account & Image Tags ##########
+aws_account_id = "245681210702"
+front_image_tag = "53fefc0"
+backend_image_tag = "53fefc0"
 

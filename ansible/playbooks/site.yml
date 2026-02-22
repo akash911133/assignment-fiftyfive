@@ -1,0 +1,20 @@
+---
+- name: Retrieve SSM Parameters
+  hosts: frontend:backend
+  become: yes
+  roles:
+    - common
+  tasks:
+    - include: roles/common/tasks/retrieve_params.yml
+
+- name: Deploy Frontend Application
+  hosts: frontend
+  become: yes
+  roles:
+    - frontend
+
+- name: Deploy Backend Application  
+  hosts: backend
+  become: yes
+  roles:
+    - backend

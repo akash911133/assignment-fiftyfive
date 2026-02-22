@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   backend:
-    image: app-backend:1
+    image: {{ ecr_backend_image }}
     container_name: expense-backend
     ports:
       - "5000:5000"

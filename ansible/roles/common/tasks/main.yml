@@ -1,0 +1,34 @@
+---
+- name: Get internal ALB DNS from SSM Parameter Store
+  shell: aws ssm get-parameter --name "/{{ client_name }}/{{ client_environment }}/internal-alb-dns" --query 'Parameter.Value' --output text
+  register: internal_alb_dns_result
+  changed_when: false
+
+- name: Set internal ALB DNS fact
+  set_fact:
+    internal_alb_dns: "{{ internal_alb_dns_result.stdout }}"
+
+- name: Get ECR frontend image from SSM Parameter Store
+  shell: aws ssm get-parameter --name "/{{ client_name }}/{{ client_environment }}/ecr-frontend-image" --query 'Parameter.Value' --output text
+  register: ecr_frontend_result
+  changed_when: false
+
+- name: Set ECR frontend image fact
+  set_fact:
+    ecr_frontend_image: "{{ ecr_frontend_result.stdout }}"
+
+- name: Get ECR backend image from SSM Parameter Store
+  shell: aws ssm get-parameter --name "/{{ client_name }}/{{ client_environment }}/ecr-backend-image" --query 'Parameter.Value' --output text
+  register: ecr_backend_result
+  changed_when: false
+
+- name: Set ECR backend image fact
+  set_fact:
+    ecr_backend_image: "{{ ecr_backend_result.stdout }}"
+
+- name: Display retrieved parameters
+  debug:
+    msg:
+      - "Internal ALB DNS: {{ internal_alb_dns }}"
+      - "ECR Frontend Image: {{ ecr_frontend_image }}"
+      - "ECR Backend Image: {{ ecr_backend_image }}"

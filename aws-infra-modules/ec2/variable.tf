@@ -33,3 +33,24 @@ variable "instance_type" {
 variable "ami_id" {
   type = string
 }
+
+variable "s3_bucket_name" {
+  description = "S3 bucket name for Ansible files"
+  type        = string
+}
+
+variable "aws_account_id" {
+  description = "AWS Account ID"
+  type        = string
+}
+
+variable "front_image_tag" {
+  description = "Frontend image tag"
+  type        = string
+}
+
+variable "backend_image_tag" {
+  description = "Backend image tag"
+  type        = string
+}
+

@@ -25,4 +25,8 @@ module "stack_ec2" {
 
     ami_id        = var.ami_id
     instance_type = var.instance_type
+    s3_bucket_name = var.s3_bucket_name
+    aws_account_id = var.aws_account_id
+    front_image_tag = var.front_image_tag
+    backend_image_tag = var.backend_image_tag
 }
