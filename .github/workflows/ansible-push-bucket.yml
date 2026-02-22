@@ -27,7 +27,7 @@ jobs:
       - name: Configure AWS Credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::${{ secrets.YOUR_ACCOUNT_ID }}:role/githubActionRoleForFiftyfive
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/githubActionRoleForFiftyfive
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Sync Ansible Folder to S3
