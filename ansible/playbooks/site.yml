@@ -1,6 +1,6 @@
 ---
 - name: Retrieve SSM Parameters
-  hosts: frontend:backend
+  hosts: frontend-node:backend-node
   become: yes
   vars:
     client_name: "{{ lookup('env', 'CLIENT_NAME') }}"
@@ -11,7 +11,7 @@
     - common
 
 - name: Deploy Frontend Application
-  hosts: frontend
+  hosts: frontend-node
   become: yes
   vars:
     client_name: "{{ lookup('env', 'CLIENT_NAME') }}"
@@ -22,7 +22,7 @@
     - frontend
 
 - name: Deploy Backend Application  
-  hosts: backend
+  hosts: backend-node
   become: yes
   vars:
     client_name: "{{ lookup('env', 'CLIENT_NAME') }}"

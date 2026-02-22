@@ -3,12 +3,12 @@ all:
   children:
     frontend:
       hosts:
-        localhost:
+        frontend-node:
           ansible_connection: local
           ansible_user: ubuntu
     
     backend:
       hosts:
-        localhost:
+        backend-node:
           ansible_connection: local
           ansible_user: ubuntu
