@@ -10,7 +10,7 @@ def main():
             client_name=dict(required=True, type='str'),
             client_environment=dict(required=True, type='str'),
             region=dict(required=False, type='str', default='eu-west-1'),
-            parameters=dict(required=True, type='list', default=['internal_alb_dns', 'ecr_frontend_image', 'ecr_backend_image'])
+            parameters=dict(required=False, type='list', default=['internal_alb_dns', 'ecr_frontend_image', 'ecr_backend_image'])
         )
     )
 
