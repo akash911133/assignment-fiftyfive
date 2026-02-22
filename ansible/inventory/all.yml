@@ -7,10 +7,9 @@ all:
           ansible_connection: local
           ansible_user: ubuntu
           vars:
-            internal_alb_dns: "{{ lookup('env', 'INTERNAL_ALB_DNS') }}"
-            ecr_frontend_image: "{{ lookup('env', 'ECR_FRONTEND_IMAGE') }}"
             client_name: "{{ lookup('env', 'CLIENT_NAME') }}"
             client_environment: "{{ lookup('env', 'CLIENT_ENVIRONMENT') }}"
+            aws_region: "{{ lookup('env', 'AWS_REGION') | default('eu-west-1') }}"
     
     backend:
       hosts:
@@ -18,6 +17,6 @@ all:
           ansible_connection: local
           ansible_user: ubuntu
           vars:
-            ecr_backend_image: "{{ lookup('env', 'ECR_BACKEND_IMAGE') }}"
             client_name: "{{ lookup('env', 'CLIENT_NAME') }}"
             client_environment: "{{ lookup('env', 'CLIENT_ENVIRONMENT') }}"
+            aws_region: "{{ lookup('env', 'AWS_REGION') | default('eu-west-1') }}"
