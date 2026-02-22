@@ -24,7 +24,7 @@
 
 - name: Login to Amazon ECR
   shell: |
-    aws ecr get-login-password --region {{ aws_region }} | docker login --username AWS --password-stdin {{ ssm_parameters.ecr_frontend_image.split('/')[0] }}
+    aws ecr get-login-password --region {{ aws_region }} | docker login --username AWS --password-stdin {{ ecr_frontend_image.split('/')[0] }}
   environment:
     AWS_REGION: "{{ aws_region }}"
     AWS_DEFAULT_REGION: "{{ aws_region }}"
@@ -35,7 +35,7 @@
     dest: /workspaces/frontend/docker-compose.yml
     mode: '0644'
   vars:
-    ecr_frontend_image: "{{ ssm_parameters.ecr_frontend_image }}"
+    ecr_frontend_image: "{{ ecr_frontend_image }}"
 
 - name: Generate nginx.conf from template
   template:
@@ -43,7 +43,7 @@
     dest: /workspaces/frontend/nginx.conf
     mode: '0644'
   vars:
-    internal_alb_dns: "{{ ssm_parameters.internal_alb_dns }}"
+    internal_alb_dns: "{{ internal_alb_dns }}"
 
 - name: Stop existing containers
   shell: |

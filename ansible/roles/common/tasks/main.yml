@@ -3,7 +3,7 @@
   ssm_params:
     client_name: "{{ client_name }}"
     client_environment: "{{ client_environment }}"
-    region: "{{ aws_region | default('eu-west-1') }}"
+    region: "{{ aws_region }}"
     parameters:
       - internal_alb_dns
       - ecr_frontend_image

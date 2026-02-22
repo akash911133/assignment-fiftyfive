@@ -1,51 +1,18 @@
 ---
-- name: Debug Environment Variables
-  hosts: frontend:backend
-  become: yes
-  vars:
-    client_name: "{{ lookup('env', 'CLIENT_NAME') }}"
-    client_environment: "{{ lookup('env', 'CLIENT_ENVIRONMENT') }}"
-    aws_region: "{{ lookup('env', 'AWS_REGION') | default('eu-west-1') }}"
-  tasks:
-    - name: Display all environment variables
-      debug:
-        msg: 
-          - "CLIENT_NAME: {{ lookup('env', 'CLIENT_NAME') }}"
-          - "CLIENT_ENVIRONMENT: {{ lookup('env', 'CLIENT_ENVIRONMENT') }}"
-          - "AWS_REGION: {{ lookup('env', 'AWS_REGION') }}"
-          - "client_name var: {{ client_name }}"
-          - "client_environment var: {{ client_environment }}"
-          - "aws_region var: {{ aws_region }}"
-          - "Running on: {{ inventory_hostname }}"
-
 - name: Retrieve SSM Parameters
   hosts: frontend:backend
   become: yes
-  vars:
-    client_name: "{{ lookup('env', 'CLIENT_NAME') }}"
-    client_environment: "{{ lookup('env', 'CLIENT_ENVIRONMENT') }}"
-    aws_region: "{{ lookup('env', 'AWS_REGION') | default('eu-west-1') }}"
   roles:
     - common
 
 - name: Deploy Frontend Application
   hosts: frontend
   become: yes
-  vars:
-    client_name: "{{ lookup('env', 'CLIENT_NAME') }}"
-    client_environment: "{{ lookup('env', 'CLIENT_ENVIRONMENT') }}"
-    aws_region: "{{ lookup('env', 'AWS_REGION') | default('eu-west-1') }}"
   roles:
     - frontend
-  when: inventory_hostname in groups['frontend']
 
 - name: Deploy Backend Application  
   hosts: backend
   become: yes
-  vars:
-    client_name: "{{ lookup('env', 'CLIENT_NAME') }}"
-    client_environment: "{{ lookup('env', 'CLIENT_ENVIRONMENT') }}"
-    aws_region: "{{ lookup('env', 'AWS_REGION') | default('eu-west-1') }}"
   roles:
     - backend
-  when: inventory_hostname in groups['backend']

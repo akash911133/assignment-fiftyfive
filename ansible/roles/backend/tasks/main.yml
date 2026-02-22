@@ -24,7 +24,7 @@
 
 - name: Login to Amazon ECR
   shell: |
-    aws ecr get-login-password --region {{ aws_region }} | docker login --username AWS --password-stdin {{ ssm_parameters.ecr_backend_image.split('/')[0] }}
+    aws ecr get-login-password --region {{ aws_region }} | docker login --username AWS --password-stdin {{ ecr_backend_image.split('/')[0] }}
   environment:
     AWS_REGION: "{{ aws_region }}"
     AWS_DEFAULT_REGION: "{{ aws_region }}"
@@ -35,7 +35,7 @@
     dest: /workspaces/backend/docker-compose.yml
     mode: '0644'
   vars:
-    ecr_backend_image: "{{ ssm_parameters.ecr_backend_image }}"
+    ecr_backend_image: "{{ ecr_backend_image }}"
 
 - name: Stop existing containers
   shell: |

@@ -10,6 +10,7 @@ all:
             client_name: "{{ lookup('env', 'CLIENT_NAME') }}"
             client_environment: "{{ lookup('env', 'CLIENT_ENVIRONMENT') }}"
             aws_region: "{{ lookup('env', 'AWS_REGION') | default('eu-west-1') }}"
+            aws_account_id: "{{ lookup('env', 'AWS_ACCOUNT_ID') }}"
     
     backend:
       hosts:
@@ -20,3 +21,4 @@ all:
             client_name: "{{ lookup('env', 'CLIENT_NAME') }}"
             client_environment: "{{ lookup('env', 'CLIENT_ENVIRONMENT') }}"
             aws_region: "{{ lookup('env', 'AWS_REGION') | default('eu-west-1') }}"
+            aws_account_id: "{{ lookup('env', 'AWS_ACCOUNT_ID') }}"
