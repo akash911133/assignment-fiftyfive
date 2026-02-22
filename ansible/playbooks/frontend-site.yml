@@ -20,26 +20,3 @@
     aws_account_id: "{{ lookup('env', 'AWS_ACCOUNT_ID') }}"
   roles:
     - frontend
-
-- name: Tag EC2 Instance as Successfully Configured
-  hosts: frontend-node
-  become: yes
-  vars:
-    client_name: "{{ lookup('env', 'CLIENT_NAME') }}"
-    client_environment: "{{ lookup('env', 'CLIENT_ENVIRONMENT') }}"
-    aws_region: "{{ lookup('env', 'AWS_REGION') | default('eu-west-1') }}"
-  tasks:
-    - name: Add success tag to EC2 instance
-      ec2_tag:
-        resource: "{{ ansible_ec2_instance_id }}"
-        state: present
-        tags:
-          node-configuration: "success"
-          configuration-timestamp: "{{ ansible_date_time.iso8601 }}"
-          configured-by: "ansible"
-      delegate_to: localhost
-      run_once: true
-
-    - name: Display success message
-      debug:
-        msg: "✅ Frontend node successfully configured with tag: node-configuration=success"
