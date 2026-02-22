@@ -1,0 +1,22 @@
+---
+- name: Retrieve SSM Parameters
+  hosts: frontend-node:backend-node
+  become: yes
+  vars:
+    client_name: "{{ lookup('env', 'CLIENT_NAME') }}"
+    client_environment: "{{ lookup('env', 'CLIENT_ENVIRONMENT') }}"
+    aws_region: "{{ lookup('env', 'AWS_REGION') | default('eu-west-1') }}"
+    aws_account_id: "{{ lookup('env', 'AWS_ACCOUNT_ID') }}"
+  roles:
+    - common
+
+- name: Deploy Backend Application  
+  hosts: backend-node
+  become: yes
+  vars:
+    client_name: "{{ lookup('env', 'CLIENT_NAME') }}"
+    client_environment: "{{ lookup('env', 'CLIENT_ENVIRONMENT') }}"
+    aws_region: "{{ lookup('env', 'AWS_REGION') | default('eu-west-1') }}"
+    aws_account_id: "{{ lookup('env', 'AWS_ACCOUNT_ID') }}"
+  roles:
+    - backend

@@ -33,4 +33,4 @@ export AWS_ACCOUNT_ID=$AWS_ACCOUNT_ID
 
 # Run Ansible playbook with dynamic inventory
 cd /workspaces/ansible
-ansible-playbook -i inventory/all.yml playbooks/site.yml --limit backend
+ansible-playbook -i inventory/all.yml playbooks/backend-site.yml --limit backend
