@@ -78,3 +78,10 @@ variable "common_tags" {
     Managed_By         = "Terraform"
   }
 }
+
+
+variable "ec2_public_key" {
+  description = "Public key for EC2"
+  type        = string
+  sensitive   = true
+}
