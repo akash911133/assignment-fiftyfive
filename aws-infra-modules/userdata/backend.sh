@@ -16,4 +16,4 @@ mkdir -p /workspaces/ansible
 aws s3 cp s3://${S3_BUCKET_NAME}/ansible/ /workspaces/ansible/ --recursive
 
 cd /workspaces/ansible
-ansible-playbook -i inventory/all.yml playbooks/backend-site.yml --limit backend  -e "client_name=$CLIENT_NAME client_environment=$CLIENT_ENVIRONMENT aws_region=$AWS_REGION aws_account_id=$AWS_ACCOUNT_ID"
+ansible-playbook -i inventory/all.yml playbooks/backend-site.yml --limit backend --extra-vars "client_name=${CLIENT_NAME} client_environment=${CLIENT_ENVIRONMENT} aws_region=${AWS_REGION} aws_account_id=${AWS_ACCOUNT_ID}"
