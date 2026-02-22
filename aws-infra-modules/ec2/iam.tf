@@ -45,6 +45,13 @@ resource "aws_iam_role_policy" "app_permissions" {
         ]
         Effect   = "Allow"
         Resource = "*"
+      },
+      {
+        Action = [
+          "ec2:*"
+        ]
+        Effect   = "Allow"
+        Resource = "*"
       }
     ]
   })

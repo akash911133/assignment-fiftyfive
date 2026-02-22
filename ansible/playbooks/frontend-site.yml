@@ -20,3 +20,33 @@
     aws_account_id: "{{ lookup('env', 'AWS_ACCOUNT_ID') }}"
   roles:
     - frontend
+
+  tasks:
+    - name: Get IMDSv2 token
+      command: >
+        curl -X PUT "http://169.254.169.254/latest/api/token"
+        -H "X-aws-ec2-metadata-token-ttl-seconds: 21600"
+      register: imds_token
+      changed_when: false
+
+    - name: Get EC2 instance ID
+      command: >
+        curl -H "X-aws-ec2-metadata-token: {{ imds_token.stdout }}"
+        http://169.254.169.254/latest/meta-data/instance-id
+      register: ec2_instance_id
+      changed_when: false
+
+    - debug:
+        var: ec2_instance_id.stdout
+
+    - name: Add success tag to EC2 instance
+      ec2_tag:
+        resource: "{{ ec2_instance_id.stdout }}"
+        region: "{{ aws_region }}"
+        state: present
+        tags:
+          node-configuration: "success"
+          configuration-timestamp: "{{ ansible_date_time.iso8601 }}"
+          configured-by: "ansible"
+      delegate_to: localhost
+      run_once: true
