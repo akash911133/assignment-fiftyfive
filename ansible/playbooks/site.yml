@@ -1,11 +1,23 @@
 ---
+- name: Debug Environment Variables
+  hosts: frontend:backend
+  become: yes
+  tasks:
+    - name: Display all environment variables
+      debug:
+        msg: 
+          - "CLIENT_NAME: {{ lookup('env', 'CLIENT_NAME') }}"
+          - "CLIENT_ENVIRONMENT: {{ lookup('env', 'CLIENT_ENVIRONMENT') }}"
+          - "AWS_REGION: {{ lookup('env', 'AWS_REGION') }}"
+          - "client_name var: {{ client_name }}"
+          - "client_environment var: {{ client_environment }}"
+          - "aws_region var: {{ aws_region }}"
+
 - name: Retrieve SSM Parameters
   hosts: frontend:backend
   become: yes
   roles:
     - common
-  tasks:
-    - include: roles/common/tasks/retrieve_params.yml
 
 - name: Deploy Frontend Application
   hosts: frontend

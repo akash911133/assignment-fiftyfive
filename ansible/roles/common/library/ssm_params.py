@@ -9,7 +9,7 @@ def main():
         argument_spec=dict(
             client_name=dict(required=True, type='str'),
             client_environment=dict(required=True, type='str'),
-            region=dict(required=False, type='str', default='us-east-1'),
+            region=dict(required=False, type='str', default='eu-west-1'),
             parameters=dict(required=True, type='list', default=['internal_alb_dns', 'ecr_frontend_image', 'ecr_backend_image'])
         )
     )

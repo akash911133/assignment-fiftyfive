@@ -1,30 +1,20 @@
 ---
-- name: Get internal ALB DNS from SSM Parameter Store
-  shell: aws ssm get-parameter --name "/{{ client_name }}/{{ client_environment }}/internal-alb-dns" --query 'Parameter.Value' --output text
-  register: internal_alb_dns_result
-  changed_when: false
+- name: Retrieve SSM parameters using custom module
+  ssm_params:
+    client_name: "{{ client_name }}"
+    client_environment: "{{ client_environment }}"
+    region: "{{ aws_region | default('eu-west-1') }}"
+    parameters:
+      - internal_alb_dns
+      - ecr_frontend_image
+      - ecr_backend_image
+  register: ssm_result
 
-- name: Set internal ALB DNS fact
+- name: Set facts from SSM parameters
   set_fact:
-    internal_alb_dns: "{{ internal_alb_dns_result.stdout }}"
-
-- name: Get ECR frontend image from SSM Parameter Store
-  shell: aws ssm get-parameter --name "/{{ client_name }}/{{ client_environment }}/ecr-frontend-image" --query 'Parameter.Value' --output text
-  register: ecr_frontend_result
-  changed_when: false
-
-- name: Set ECR frontend image fact
-  set_fact:
-    ecr_frontend_image: "{{ ecr_frontend_result.stdout }}"
-
-- name: Get ECR backend image from SSM Parameter Store
-  shell: aws ssm get-parameter --name "/{{ client_name }}/{{ client_environment }}/ecr-backend-image" --query 'Parameter.Value' --output text
-  register: ecr_backend_result
-  changed_when: false
-
-- name: Set ECR backend image fact
-  set_fact:
-    ecr_backend_image: "{{ ecr_backend_result.stdout }}"
+    internal_alb_dns: "{{ ssm_result.ansible_facts.ssm_parameters.internal_alb_dns }}"
+    ecr_frontend_image: "{{ ssm_result.ansible_facts.ssm_parameters.ecr_frontend_image }}"
+    ecr_backend_image: "{{ ssm_result.ansible_facts.ssm_parameters.ecr_backend_image }}"
 
 - name: Display retrieved parameters
   debug:
