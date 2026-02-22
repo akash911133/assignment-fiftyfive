@@ -6,19 +6,9 @@ all:
         localhost:
           ansible_connection: local
           ansible_user: ubuntu
-          vars:
-            client_name: "{{ lookup('env', 'CLIENT_NAME') }}"
-            client_environment: "{{ lookup('env', 'CLIENT_ENVIRONMENT') }}"
-            aws_region: "{{ lookup('env', 'AWS_REGION') | default('eu-west-1') }}"
-            aws_account_id: "{{ lookup('env', 'AWS_ACCOUNT_ID') }}"
     
     backend:
       hosts:
         localhost:
           ansible_connection: local
           ansible_user: ubuntu
-          vars:
-            client_name: "{{ lookup('env', 'CLIENT_NAME') }}"
-            client_environment: "{{ lookup('env', 'CLIENT_ENVIRONMENT') }}"
-            aws_region: "{{ lookup('env', 'AWS_REGION') | default('eu-west-1') }}"
-            aws_account_id: "{{ lookup('env', 'AWS_ACCOUNT_ID') }}"
