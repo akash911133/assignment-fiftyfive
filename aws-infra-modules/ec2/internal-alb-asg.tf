@@ -172,6 +172,7 @@ resource "aws_launch_template" "backend_lt" {
     CLIENT_NAME         = var.client_name
     CLIENT_ENVIRONMENT  = var.client_environment
     AWS_REGION          = var.aws_region
+    AWS_ACCOUNT_ID      = var.aws_account_id
   })
 }
 
