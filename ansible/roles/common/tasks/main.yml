@@ -32,4 +32,3 @@
       - "Internal ALB DNS: {{ internal_alb_dns }}"
       - "ECR Frontend Image: {{ ecr_frontend_image }}"
       - "ECR Backend Image: {{ ecr_backend_image }}"
- 
