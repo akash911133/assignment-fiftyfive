@@ -31,7 +31,7 @@
 
 - name: Generate docker-compose.yml from template
   template:
-    src: backend/docker-compose.yml.j2
+    src: docker-compose.yml.j2
     dest: /workspaces/backend/docker-compose.yml
     mode: '0644'
   vars:

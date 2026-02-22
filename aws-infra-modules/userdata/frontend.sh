@@ -4,7 +4,8 @@
 yum update -y
 
 # Install required packages
-yum install -y curl unzip python3 git
+yum install -y curl unzip python3 python3-pip git --allowerasing
+pip3 install boto3 botocore
 
 # Install Ansible (stable version)
 amazon-linux-extras enable ansible2
@@ -20,12 +21,6 @@ mkdir -p /workspaces/ansible
 # Copy Ansible folder from S3 bucket
 aws s3 cp s3://${S3_BUCKET_NAME}/ansible/ /workspaces/ansible/ --recursive
 
-# Export variables for Ansible
-export CLIENT_NAME=${CLIENT_NAME}
-export CLIENT_ENVIRONMENT=${CLIENT_ENVIRONMENT}
-export AWS_REGION=${AWS_REGION}
-export AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}
-
 # Run Ansible playbook
 cd /workspaces/ansible
-ansible-playbook -i inventory/all.yml playbooks/frontend-site.yml --limit frontend
+ansible-playbook -i inventory/all.yml playbooks/frontend-site.yml --limit frontend -e "client_name=$CLIENT_NAME client_environment=$CLIENT_ENVIRONMENT aws_region=$AWS_REGION aws_account_id=$AWS_ACCOUNT_ID"
