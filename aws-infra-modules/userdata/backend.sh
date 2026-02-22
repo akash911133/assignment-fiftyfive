@@ -26,10 +26,10 @@ mkdir -p /workspaces/ansible
 aws s3 cp s3://${S3_BUCKET_NAME}/ansible/ /workspaces/ansible/ --recursive
 
 # Export variables for Ansible
-export CLIENT_NAME=$CLIENT_NAME
-export CLIENT_ENVIRONMENT=$CLIENT_ENVIRONMENT
-export AWS_REGION=$AWS_REGION
-export AWS_ACCOUNT_ID=$AWS_ACCOUNT_ID
+export CLIENT_NAME=${CLIENT_NAME}
+export CLIENT_ENVIRONMENT=${CLIENT_ENVIRONMENT}
+export AWS_REGION=${AWS_REGION}
+export AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}
 
 # Run Ansible playbook with dynamic inventory
 cd /workspaces/ansible
