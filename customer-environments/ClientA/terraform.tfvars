@@ -30,5 +30,5 @@ s3_bucket_name = "aws-platform-infra-bucket"
 #### AWS Account & Image Tags ##########
 aws_account_id = "245681210702"
 front_image_tag = "62f9b4e"
-backend_image_tag = "62f9b4e"
+backend_image_tag = "53fefc0"
 
