@@ -54,9 +54,7 @@ jobs:
         working-directory: aws-infra-template/deploy-customer-stack
         env:
           TF_VAR_ec2_public_key: ${{ secrets.EC2_PUBLIC_KEY }}
-        run: |
-          terraform plan 
-          sleep 60
+        run: terraform plan 
 
       
  # approval gate # approval gate # approval gate # approval gate # approval gate
@@ -66,4 +64,4 @@ jobs:
         working-directory: aws-infra-template/deploy-customer-stack
         env:
           TF_VAR_ec2_public_key: ${{ secrets.EC2_PUBLIC_KEY }}
-        run: terraform apply -auto-approve tfplan
+        run: terraform apply -auto-approve 
