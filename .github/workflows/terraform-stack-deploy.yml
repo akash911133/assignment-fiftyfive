@@ -52,6 +52,8 @@ jobs:
 
       - name: Terraform Plan
         working-directory: aws-infra-template/deploy-customer-stack
+        env:
+          TF_VAR_ec2_public_key: ${{ secrets.EC2_PUBLIC_KEY }}
         run: terraform plan 
 
   terraform-apply:
@@ -94,5 +96,8 @@ jobs:
 
       - name: Terraform Apply
         working-directory: aws-infra-template/deploy-customer-stack
+        env:
+          TF_VAR_ec2_public_key: ${{ secrets.EC2_PUBLIC_KEY }}
         run: terraform apply -auto-approve tfplan
+        
         

@@ -60,3 +60,8 @@ variable "common_tags" {
   default     = {}
 }
 
+variable "ec2_public_key" {
+  description = "Public key for EC2"
+  type        = string
+  sensitive   = true
+}

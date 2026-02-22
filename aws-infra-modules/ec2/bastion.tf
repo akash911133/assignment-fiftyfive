@@ -6,7 +6,7 @@
 
 resource "aws_key_pair" "my-key" {
   key_name   = "terra-automate-key"
-  public_key = file("/home/ubuntu/.ssh/id_rsa.pub")
+  public_key = var.ec2_public_key
 }
 
 resource "aws_security_group" "my-bastion-sg" {
