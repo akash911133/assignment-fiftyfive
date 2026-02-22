@@ -1,6 +1,6 @@
 ---
 - name: Retrieve SSM Parameters
-  hosts: frontend-node:backend-node
+  hosts: frontend-node
   become: yes
   vars:
     client_name: "{{ lookup('env', 'CLIENT_NAME') }}"
