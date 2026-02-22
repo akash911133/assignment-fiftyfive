@@ -167,13 +167,15 @@ resource "aws_launch_template" "backend_lt" {
     security_groups             = [aws_security_group.backend_sg.id]
   }
 
-  user_data = templatefile("${path.module}/../userdata/backend.sh", {
-    S3_BUCKET_NAME      = var.s3_bucket_name
-    CLIENT_NAME         = var.client_name
-    CLIENT_ENVIRONMENT  = var.client_environment
-    AWS_REGION          = var.aws_region
-    AWS_ACCOUNT_ID      = var.aws_account_id
-  })
+  user_data = base64encode(
+    templatefile("${path.module}/../userdata/backend.sh", {
+      S3_BUCKET_NAME      = var.s3_bucket_name
+      CLIENT_NAME         = var.client_name
+      CLIENT_ENVIRONMENT  = var.client_environment
+      AWS_REGION          = var.aws_region
+      AWS_ACCOUNT_ID      = var.aws_account_id
+    })
+  )
 }
 
 ############################
