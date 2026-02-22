@@ -1,0 +1,26 @@
+version: "3.9"
+
+services:
+  backend:
+    image: {{ ecr_backend_image }}
+    container_name: expense-backend
+    ports:
+      - "5000:5000"
+    environment:
+      MONGO_URI: mongodb://db:27017/expense_db
+      JWT_SECRET: e581372412881a8a196c46b1d9d13f45a42be030085c4ba2baad205a8bd822c3
+    depends_on:
+      - db
+    restart: always
+
+  db:
+    image: mongo:6
+    container_name: expense-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    restart: always
+
+volumes:
+  mongo_data:

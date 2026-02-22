@@ -1,0 +1,53 @@
+---
+- name: Install Docker
+  apt:
+    name: docker.io
+    state: present
+    update_cache: yes
+
+- name: Install Docker Compose
+  shell: |
+    curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+    chmod +x /usr/local/bin/docker-compose
+
+- name: Start Docker service
+  service:
+    name: docker
+    state: started
+    enabled: yes
+
+- name: Create workspace directory
+  file:
+    path: /workspaces/frontend
+    state: directory
+    mode: '0755'
+
+- name: Generate docker-compose.yml from template
+  template:
+    src: docker-compose.yml.j2
+    dest: /workspaces/frontend/docker-compose.yml
+    mode: '0644'
+  vars:
+    ecr_frontend_image: "{{ ssm_parameters.ecr_frontend_image }}"
+
+- name: Generate nginx.conf from template
+  template:
+    src: nginx.conf.j2
+    dest: /workspaces/frontend/nginx.conf
+    mode: '0644'
+  vars:
+    internal_alb_dns: "{{ ssm_parameters.internal_alb_dns }}"
+
+- name: Stop existing containers
+  shell: |
+    cd /workspaces/frontend
+    docker-compose down || true
+
+- name: Start frontend services
+  shell: |
+    cd /workspaces/frontend
+    docker-compose up -d
+
+- name: Wait for services to be ready
+  pause:
+    seconds: 30

@@ -7,7 +7,7 @@ networks:
 
 services:
   frontend:
-    image: app-frontend:latest
+    image: {{ ecr_frontend_image }}
     container_name: frontend
     networks:
       - app-network

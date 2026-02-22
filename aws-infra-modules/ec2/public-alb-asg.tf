@@ -92,6 +92,12 @@ resource "aws_launch_template" "frontend_lt" {
     associate_public_ip_address = false
     security_groups             = [aws_security_group.frontend_sg.id]
   }
+
+  user_data = base64encode(templatefile("${path.module}/../userdata/frontend.sh", {
+    S3_BUCKET_NAME = var.s3_bucket_name
+    CLIENT_NAME = var.client_name
+    CLIENT_ENVIRONMENT = var.client_environment
+  }))
 }
 
 
