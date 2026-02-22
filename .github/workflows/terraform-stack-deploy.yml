@@ -12,7 +12,7 @@ on:
         required: true
         type: string
       aws_region:
-        description: "AWS Region"
+        description: "Select region of your github action Role"
         required: true
         default: us-east-1
         type: string
@@ -52,14 +52,7 @@ jobs:
 
       - name: Terraform Plan
         working-directory: aws-infra-template/deploy-customer-stack
-        run: terraform plan -var-file=terraform.tfvars -out=tfplan
-
-      - name: Upload Plan Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: tfplan
-          path: aws-infra-template/deploy-customer-stack/tfplan
-
+        run: terraform plan 
 
   terraform-apply:
     name: Terraform Apply
