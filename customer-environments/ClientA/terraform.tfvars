@@ -20,7 +20,7 @@ private_subnet_cidrs = [
 
 #### vpc specific variables ##########
 
-ami_id = "ami-03446a3af42c5e74e"
+ami_id = "ami-09c20105c9b62f893"
 
 instance_type = "t2.micro"
 
