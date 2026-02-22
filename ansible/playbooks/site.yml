@@ -16,6 +16,7 @@
           - "client_name var: {{ client_name }}"
           - "client_environment var: {{ client_environment }}"
           - "aws_region var: {{ aws_region }}"
+          - "Running on: {{ inventory_hostname }}"
 
 - name: Retrieve SSM Parameters
   hosts: frontend:backend
@@ -36,6 +37,7 @@
     aws_region: "{{ lookup('env', 'AWS_REGION') | default('eu-west-1') }}"
   roles:
     - frontend
+  when: inventory_hostname in groups['frontend']
 
 - name: Deploy Backend Application  
   hosts: backend
@@ -46,3 +48,4 @@
     aws_region: "{{ lookup('env', 'AWS_REGION') | default('eu-west-1') }}"
   roles:
     - backend
+  when: inventory_hostname in groups['backend']

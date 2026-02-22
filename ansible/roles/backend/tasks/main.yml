@@ -22,6 +22,13 @@
     state: directory
     mode: '0755'
 
+- name: Login to Amazon ECR
+  shell: |
+    aws ecr get-login-password --region {{ aws_region }} | docker login --username AWS --password-stdin {{ ssm_parameters.ecr_backend_image.split('/')[0] }}
+  environment:
+    AWS_REGION: "{{ aws_region }}"
+    AWS_DEFAULT_REGION: "{{ aws_region }}"
+
 - name: Generate docker-compose.yml from template
   template:
     src: docker-compose.yml.j2
