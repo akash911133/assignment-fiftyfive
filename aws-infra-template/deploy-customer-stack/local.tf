@@ -9,5 +9,6 @@ locals {
     Client_Environment = local.Client_Environment
     Billing_Name       = local.Billing_Name
     Managed_By         = "Terraform"
+    Node_Type         = "global"  # Global provider level tag
   }
 }

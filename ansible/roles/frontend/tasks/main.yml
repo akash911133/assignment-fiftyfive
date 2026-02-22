@@ -1,7 +1,7 @@
 ---
 - name: Install Docker
-  apt:
-    name: docker.io
+  yum:
+    name: docker
     state: present
     update_cache: yes
 
@@ -31,7 +31,7 @@
 
 - name: Generate docker-compose.yml from template
   template:
-    src: docker-compose.yml.j2
+    src: frontend/docker-compose.yml.j2
     dest: /workspaces/frontend/docker-compose.yml
     mode: '0644'
   vars:
@@ -39,7 +39,7 @@
 
 - name: Generate nginx.conf from template
   template:
-    src: nginx.conf.j2
+    src: frontend/nginx.conf.j2
     dest: /workspaces/frontend/nginx.conf
     mode: '0644'
   vars:

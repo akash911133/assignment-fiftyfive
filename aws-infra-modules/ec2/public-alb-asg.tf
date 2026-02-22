@@ -93,6 +93,12 @@ resource "aws_launch_template" "frontend_lt" {
     security_groups             = [aws_security_group.frontend_sg.id]
   }
 
+  tags = merge(var.common_tags, {
+    Name                        = "${var.client_name}-frontend-instance"
+    Node_Type                  = "frontend"
+    Billing_Name               = "${var.client_name}-${var.client_environment}-frontend"
+  })
+
   user_data = base64encode(
     templatefile("${path.module}/../userdata/frontend.sh", {
       S3_BUCKET_NAME      = var.s3_bucket_name

@@ -5,10 +5,10 @@ all:
       hosts:
         frontend-node:
           ansible_connection: local
-          ansible_user: ubuntu
+          ansible_user: ec2-user
     
     backend:
       hosts:
         backend-node:
           ansible_connection: local
-          ansible_user: ubuntu
+          ansible_user: ec2-user

@@ -29,4 +29,5 @@ module "stack_ec2" {
     aws_account_id = var.aws_account_id
     front_image_tag = var.front_image_tag
     backend_image_tag = var.backend_image_tag
+    common_tags = var.common_tags
 }
