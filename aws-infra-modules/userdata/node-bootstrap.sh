@@ -12,7 +12,7 @@ LIMIT="${NODE_TYPE}"
 yum update -y
 
 # Install required packages
-yum install -y curl unzip python3 python3-pip git ansible
+yum install -y curl unzip python3 python3-pip git ansible --allowerasing
 pip3 install boto3 botocore
 
 # Verify installations
