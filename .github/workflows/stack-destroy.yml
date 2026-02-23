@@ -58,8 +58,14 @@ jobs:
             -backend-config="dynamodb_table=$TF_STATE_LOCK_TABLE" \
             -backend-config="encrypt=true"
 
-      # Destroy
+      # Destroy (pass same vars as deploy so Terraform is not prompted)
       - name: Terraform Destroy
         working-directory: aws-infra-template/deploy-customer-stack
-        run: terraform destroy -auto-approve
+        env:
+          TF_VAR_ec2_public_key: ${{ secrets.EC2_PUBLIC_KEY }}
+          EC2_PRIVATE_KEY: ${{ secrets.EC2_PRIVATE_KEY }}
+          TF_VAR_aws_account_id: ${{ inputs.aws_account_id }}
+        run: |
+          export TF_VAR_ec2_private_key_b64=$(echo -n "$EC2_PRIVATE_KEY" | base64 -w0)
+          terraform destroy -auto-approve
         
