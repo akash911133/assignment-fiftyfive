@@ -3,9 +3,9 @@ name: Sync Ansible Folder to S3
 on:
   push:
     branches:
-      - main
+      - '*'          # Run for all branches
     paths:
-      - 'ansible/**'   # Only run if ansible folder changes
+      - 'ansible/**' # Only run if ansible folder changes
 
 jobs:
   sync:
@@ -30,8 +30,12 @@ jobs:
           role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/githubActionRoleForFiftyfive
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Sync Ansible Folder to S3
+      - name: Set Branch Name
+        run: echo "BRANCH_NAME=${GITHUB_REF_NAME}" >> $GITHUB_ENV
+
+      - name: Sync Ansible Folder to S3 (Branch Specific)
         run: |
-          aws s3 sync ansible/  s3://${{ secrets.S3_BUCKET_NAME }}/${{ env.S3_PREFIX }}/ \
+          echo "Syncing to branch folder: $BRANCH_NAME"
+          aws s3 sync ansible/ \
+            s3://${{ secrets.S3_BUCKET_NAME }}/${{ env.S3_PREFIX }}/$BRANCH_NAME/ \
             --delete
-            
