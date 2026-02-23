@@ -1,0 +1,4 @@
+---
+# Defaults so the role works even if group_vars aren't loaded (e.g. when run from userdata)
+app_workspace: "{{ workspace_base | default('/workspaces') }}/frontend"
+ecr_image_var: ecr_frontend_image
