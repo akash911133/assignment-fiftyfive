@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   backend:
-    image: {{ ecr_backend_image }}
+    image: {{ ssm_parameters[ecr_image_var] }}
     container_name: expense-backend
     ports:
       - "5000:5000"

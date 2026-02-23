@@ -61,3 +61,4 @@ resource "aws_iam_instance_profile" "ec2_profile" {
   name = "${var.client_name}-instance-profile"
   role = aws_iam_role.ec2_app_role.name
 }
+

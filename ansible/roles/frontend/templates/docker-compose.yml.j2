@@ -7,7 +7,7 @@ networks:
 
 services:
   frontend:
-    image: {{ ecr_frontend_image }}
+    image: {{ ssm_parameters[ecr_image_var] }}
     container_name: frontend
     networks:
       - app-network

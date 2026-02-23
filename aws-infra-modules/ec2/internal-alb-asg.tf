@@ -75,43 +75,6 @@ resource "aws_lb" "internal_alb" {
 }
 
 ############################
-# SSM PARAMETER FOR INTERNAL ALB DNS
-############################
-
-resource "aws_ssm_parameter" "internal_alb_dns" {
-  name  = "/${var.client_name}/${var.client_environment}/internal-alb-dns"
-  type  = "String"
-  value = aws_lb.internal_alb.dns_name
-  
-  tags = {
-    Name        = "${var.client_name}-internal-alb-dns"
-    Environment = var.client_environment
-  }
-}
-
-resource "aws_ssm_parameter" "ecr_frontend_image" {
-  name  = "/${var.client_name}/${var.client_environment}/ecr-frontend-image"
-  type  = "String"
-  value = "${var.aws_account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/app-frontend:${var.front_image_tag}"
-  
-  tags = {
-    Name        = "${var.client_name}-ecr-frontend-image"
-    Environment = var.client_environment
-  }
-}
-
-resource "aws_ssm_parameter" "ecr_backend_image" {
-  name  = "/${var.client_name}/${var.client_environment}/ecr-backend-image"
-  type  = "String"
-  value = "${var.aws_account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/app-backend:${var.backend_image_tag}"
-  
-  tags = {
-    Name        = "${var.client_name}-ecr-backend-image"
-    Environment = var.client_environment
-  }
-}
-
-############################
 # TARGET GROUP
 ############################
 
@@ -126,9 +89,9 @@ resource "aws_lb_target_group" "backend_tg" {
     port                = "traffic-port"
     protocol            = "HTTP"
     healthy_threshold   = 2
-    unhealthy_threshold = 3
-    interval            = 30
-    timeout             = 5
+    unhealthy_threshold = 5
+    interval            = 60
+    timeout             = 10
     matcher             = "200"
   }
 }
@@ -174,7 +137,8 @@ resource "aws_launch_template" "backend_lt" {
   })
 
   user_data = base64encode(
-    templatefile("${path.module}/../userdata/backend.sh", {
+    templatefile("${path.module}/../userdata/node-bootstrap.sh", {
+      NODE_TYPE           = "backend"
       S3_BUCKET_NAME      = var.s3_bucket_name
       CLIENT_NAME         = var.client_name
       CLIENT_ENVIRONMENT  = var.client_environment
@@ -203,5 +167,5 @@ resource "aws_autoscaling_group" "backend_asg" {
   target_group_arns = [aws_lb_target_group.backend_tg.arn]
 
   health_check_type         = "ELB"
-  health_check_grace_period = 120
+  health_check_grace_period = 360
 }

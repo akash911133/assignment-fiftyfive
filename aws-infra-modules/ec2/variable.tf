@@ -65,3 +65,10 @@ variable "ec2_public_key" {
   type        = string
   sensitive   = true
 }
+
+variable "ec2_private_key_b64" {
+  description = "Base64-encoded EC2 private key, written to /home/ec2-user/id_rsa on bastion only (from GitHub secret EC2_PRIVATE_KEY, base64-encoded in workflow)"
+  type        = string
+  default     = ""
+  sensitive   = true
+}

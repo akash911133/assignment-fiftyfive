@@ -1,0 +1,8 @@
+---
+# Shared variables. Userdata passes these via --extra-vars; for local runs, set env or extra-vars.
+client_name: "{{ lookup('env', 'CLIENT_NAME') | default('', true) }}"
+client_environment: "{{ lookup('env', 'CLIENT_ENVIRONMENT') | default('', true) }}"
+aws_region: "{{ lookup('env', 'AWS_REGION') | default('eu-west-1') }}"
+aws_account_id: "{{ lookup('env', 'AWS_ACCOUNT_ID') | default('', true) }}"
+
+workspace_base: /workspaces
