@@ -21,9 +21,9 @@ aws --version
 
 # Create directory for Ansible files and pull from S3
 mkdir -p /workspaces/ansible
-aws s3 cp "s3://${S3_BUCKET_NAME}/ansible/main" /workspaces/ansible/ --recursive
+aws s3 cp "s3://${S3_BUCKET_NAME}/ansible/sandbox" /workspaces/ansible/ --recursive
 
 # Run Ansible playbook for this node type
 cd /workspaces/ansible
-ansible-playbook -i inventory/all.yml "playbooks/$${PLAYBOOK}" --limit "$${LIMIT}" \
+ansible-playbook -i inventory/all.yml "playbooks/${PLAYBOOK}" --limit "${LIMIT}" \
   --extra-vars "client_name=${CLIENT_NAME} client_environment=${CLIENT_ENVIRONMENT} aws_region=${AWS_REGION} aws_account_id=${AWS_ACCOUNT_ID}"
