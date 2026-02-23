@@ -1,24 +1,18 @@
 ---
+# Fetch only the SSM parameters this node type needs (from group_vars frontend.yml / backend.yml)
 - name: Retrieve SSM parameters using custom module
   ssm_params:
     client_name: "{{ client_name }}"
     client_environment: "{{ client_environment }}"
     region: "{{ aws_region }}"
-    parameters:
-      - internal_alb_dns
-      - ecr_frontend_image
-      - ecr_backend_image
+    parameters: "{{ ssm_parameters_to_fetch | default(['internal_alb_dns', 'ecr_frontend_image', 'ecr_backend_image']) }}"
   register: ssm_result
 
-- name: Set facts from SSM parameters
+- name: Set SSM parameters as facts
   set_fact:
-    internal_alb_dns: "{{ ssm_result.ansible_facts.ssm_parameters.internal_alb_dns }}"
-    ecr_frontend_image: "{{ ssm_result.ansible_facts.ssm_parameters.ecr_frontend_image }}"
-    ecr_backend_image: "{{ ssm_result.ansible_facts.ssm_parameters.ecr_backend_image }}"
+    ssm_parameters: "{{ ssm_result.ansible_facts.ssm_parameters }}"
 
 - name: Display retrieved parameters
   debug:
-    msg:
-      - "Internal ALB DNS: {{ internal_alb_dns }}"
-      - "ECR Frontend Image: {{ ecr_frontend_image }}"
-      - "ECR Backend Image: {{ ecr_backend_image }}"
+    msg: "{{ ssm_parameters | dict2items | map(attribute='value') | list }}"
+  when: ssm_parameters is defined

@@ -100,7 +100,8 @@ resource "aws_launch_template" "frontend_lt" {
   })
 
   user_data = base64encode(
-    templatefile("${path.module}/../userdata/frontend.sh", {
+    templatefile("${path.module}/../userdata/node-bootstrap.sh", {
+      NODE_TYPE           = "frontend"
       S3_BUCKET_NAME      = var.s3_bucket_name
       CLIENT_NAME         = var.client_name
       CLIENT_ENVIRONMENT  = var.client_environment

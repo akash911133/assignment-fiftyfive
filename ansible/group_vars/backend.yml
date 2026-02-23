@@ -1,0 +1,8 @@
+---
+# Backend node: SSM parameters this role needs (only these are fetched in common)
+ssm_parameters_to_fetch:
+  - internal_alb_dns
+  - ecr_backend_image
+
+app_workspace: "{{ workspace_base }}/backend"
+ecr_image_var: ecr_backend_image

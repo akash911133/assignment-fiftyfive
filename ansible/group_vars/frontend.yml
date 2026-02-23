@@ -1,0 +1,8 @@
+---
+# Frontend node: SSM parameters this role needs (only these are fetched in common)
+ssm_parameters_to_fetch:
+  - internal_alb_dns
+  - ecr_frontend_image
+
+app_workspace: "{{ workspace_base }}/frontend"
+ecr_image_var: ecr_frontend_image

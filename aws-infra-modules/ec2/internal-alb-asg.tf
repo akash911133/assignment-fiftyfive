@@ -126,9 +126,9 @@ resource "aws_lb_target_group" "backend_tg" {
     port                = "traffic-port"
     protocol            = "HTTP"
     healthy_threshold   = 2
-    unhealthy_threshold = 3
-    interval            = 30
-    timeout             = 5
+    unhealthy_threshold = 5
+    interval            = 60
+    timeout             = 10
     matcher             = "200"
   }
 }
@@ -174,7 +174,8 @@ resource "aws_launch_template" "backend_lt" {
   })
 
   user_data = base64encode(
-    templatefile("${path.module}/../userdata/backend.sh", {
+    templatefile("${path.module}/../userdata/node-bootstrap.sh", {
+      NODE_TYPE           = "backend"
       S3_BUCKET_NAME      = var.s3_bucket_name
       CLIENT_NAME         = var.client_name
       CLIENT_ENVIRONMENT  = var.client_environment
@@ -203,5 +204,5 @@ resource "aws_autoscaling_group" "backend_asg" {
   target_group_arns = [aws_lb_target_group.backend_tg.arn]
 
   health_check_type         = "ELB"
-  health_check_grace_period = 120
+  health_check_grace_period = 360
 }
