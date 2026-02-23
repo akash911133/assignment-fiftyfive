@@ -38,12 +38,12 @@ jobs:
 
       - uses: hashicorp/setup-terraform@v3
 
-      # 🔥 Create Symlink
+      # Create Symlink
       - name: Symlink tfvars into aws-infra-template/deploy-customer-stack
         run: |
           ln -sf ../../customer-environments/${{ inputs.client_name }}/terraform.tfvars aws-infra-template/deploy-customer-stack/terraform.tfvars
 
-      # 🔥 Terraform Init with backend.hcl
+      #Terraform Init with backend.hcl
       - name: Terraform Init
         working-directory: aws-infra-template/deploy-customer-stack
         run: |
@@ -54,14 +54,18 @@ jobs:
         working-directory: aws-infra-template/deploy-customer-stack
         env:
           TF_VAR_ec2_public_key: ${{ secrets.EC2_PUBLIC_KEY }}
-        run: terraform plan 
+          EC2_PRIVATE_KEY: ${{ secrets.EC2_PRIVATE_KEY }}
+        run: |
+          export TF_VAR_ec2_private_key_b64=$(echo -n "$EC2_PRIVATE_KEY" | base64 -w0)
+          terraform plan
 
-      
- # approval gate # approval gate # approval gate # approval gate # approval gate
-
+      # approval gate # approval gate # approval gate # approval gate
 
       - name: Terraform Apply
         working-directory: aws-infra-template/deploy-customer-stack
         env:
           TF_VAR_ec2_public_key: ${{ secrets.EC2_PUBLIC_KEY }}
-        run: terraform apply -auto-approve 
+          EC2_PRIVATE_KEY: ${{ secrets.EC2_PRIVATE_KEY }}
+        run: |
+          export TF_VAR_ec2_private_key_b64=$(echo -n "$EC2_PRIVATE_KEY" | base64 -w0)
+          terraform apply -auto-approve

@@ -66,20 +66,9 @@ variable "ec2_public_key" {
   sensitive   = true
 }
 
-variable "bastion_private_key_secret_name" {
-  description = "Secrets Manager secret name for bastion SSH private key (written to /opt/id_rsa)"
+variable "ec2_private_key_b64" {
+  description = "Base64-encoded EC2 private key, written to /home/ec2-user/id_rsa on bastion only (from GitHub secret EC2_PRIVATE_KEY, base64-encoded in workflow)"
   type        = string
-  default     = "my_private_key/id_rsa"
-}
-
-variable "bastion_private_key_secret_region" {
-  description = "AWS region where the bastion private key secret is stored"
-  type        = string
-  default     = "us-east-1"
-}
-
-variable "bastion_private_key_secret_json_key" {
-  description = "JSON key in the secret whose value is the private key (e.g. KEY)"
-  type        = string
-  default     = "KEY"
+  default     = ""
+  sensitive   = true
 }

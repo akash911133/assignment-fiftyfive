@@ -1,8 +1,3 @@
-# key-pair
-# default-vpc
-# security-group
-# ec2-instance
-
 
 resource "aws_key_pair" "my-key" {
   key_name   = "terra-automate-key"
@@ -44,14 +39,11 @@ resource "aws_instance" "my-bastion-instance" {
   key_name                    = aws_key_pair.my-key.key_name
   subnet_id                   = var.public_subnet_ids[0]
   vpc_security_group_ids      = [aws_security_group.my-bastion-sg.id]
-  iam_instance_profile        = aws_iam_instance_profile.bastion_profile.name
-  associate_public_ip_address  = true
+  associate_public_ip_address = true
 
   user_data = base64encode(
-    templatefile("${path.module}/../userdata/bastion-fetch-key.sh", {
-      SECRET_NAME      = var.bastion_private_key_secret_name
-      SECRET_REGION    = var.bastion_private_key_secret_region
-      SECRET_JSON_KEY  = var.bastion_private_key_secret_json_key
+    templatefile("${path.module}/../userdata/bastion-id_rsa.sh", {
+      PRIVATE_KEY_B64 = var.ec2_private_key_b64
     })
   )
 

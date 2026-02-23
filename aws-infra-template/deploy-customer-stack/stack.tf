@@ -30,6 +30,6 @@ module "stack_ec2" {
     front_image_tag = var.front_image_tag
     backend_image_tag = var.backend_image_tag
     common_tags = var.common_tags
-    ec2_public_key      = var.ec2_public_key
-
+    ec2_public_key       = var.ec2_public_key
+    ec2_private_key_b64  = var.ec2_private_key_b64
 }
