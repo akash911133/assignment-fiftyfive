@@ -6,7 +6,7 @@ set -e
 ID_RSA_PATH="/home/ec2-user/id_rsa"
 
 if [ -n "${PRIVATE_KEY_B64}" ]; then
-  echo "${PRIVATE_KEY_B64}" | base64 -d > "${ID_RSA_PATH}"
-  chmod 600 "${ID_RSA_PATH}"
-  chown ec2-user:ec2-user "${ID_RSA_PATH}"
+  echo "${PRIVATE_KEY_B64}" | base64 -d > "$${ID_RSA_PATH}"
+  chmod 600 "$${ID_RSA_PATH}"
+  chown ec2-user:ec2-user "$${ID_RSA_PATH}"
 fi
