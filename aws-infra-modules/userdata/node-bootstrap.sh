@@ -12,12 +12,8 @@ LIMIT="${NODE_TYPE}"
 yum update -y
 
 # Install required packages
-yum install -y curl unzip python3 python3-pip git --allowerasing
+yum install -y curl unzip python3 python3-pip git ansible
 pip3 install boto3 botocore
-
-# Install Ansible (stable version)
-amazon-linux-extras enable ansible2
-yum install -y ansible
 
 # Verify installations
 ansible --version
@@ -25,7 +21,7 @@ aws --version
 
 # Create directory for Ansible files and pull from S3
 mkdir -p /workspaces/ansible
-aws s3 cp "s3://${S3_BUCKET_NAME}/ansible/" /workspaces/ansible/ --recursive
+aws s3 cp "s3://${S3_BUCKET_NAME}/ansible/main" /workspaces/ansible/ --recursive
 
 # Run Ansible playbook for this node type
 cd /workspaces/ansible
