@@ -43,18 +43,27 @@ jobs:
         run: |
           ln -sf ../../customer-environments/${{ inputs.client_name }}/terraform.tfvars aws-infra-template/deploy-customer-stack/terraform.tfvars
 
-      #Terraform Init with backend.hcl
+      # Terraform Init: static backend config from GitHub secrets, key dynamic from client_name
       - name: Terraform Init
         working-directory: aws-infra-template/deploy-customer-stack
+        env:
+          TF_STATE_BUCKET: ${{ secrets.TF_STATE_BUCKET }}
+          TF_STATE_REGION: ${{ secrets.TF_STATE_REGION }}
+          TF_STATE_LOCK_TABLE: ${{ secrets.TF_STATE_LOCK_TABLE }}
         run: |
           terraform init \
-            -backend-config=../../customer-environments/${{ inputs.client_name }}/backend.hcl
+            -backend-config="bucket=$TF_STATE_BUCKET" \
+            -backend-config="key=tfstate/${{ inputs.client_name }}/terraform.tfstate" \
+            -backend-config="region=$TF_STATE_REGION" \
+            -backend-config="dynamodb_table=$TF_STATE_LOCK_TABLE" \
+            -backend-config="encrypt=true"
 
       - name: Terraform Plan
         working-directory: aws-infra-template/deploy-customer-stack
         env:
           TF_VAR_ec2_public_key: ${{ secrets.EC2_PUBLIC_KEY }}
           EC2_PRIVATE_KEY: ${{ secrets.EC2_PRIVATE_KEY }}
+          TF_VAR_aws_account_id: ${{ inputs.aws_account_id }}
         run: |
           export TF_VAR_ec2_private_key_b64=$(echo -n "$EC2_PRIVATE_KEY" | base64 -w0)
           terraform plan
@@ -66,6 +75,7 @@ jobs:
         env:
           TF_VAR_ec2_public_key: ${{ secrets.EC2_PUBLIC_KEY }}
           EC2_PRIVATE_KEY: ${{ secrets.EC2_PRIVATE_KEY }}
+          TF_VAR_aws_account_id: ${{ inputs.aws_account_id }}
         run: |
           export TF_VAR_ec2_private_key_b64=$(echo -n "$EC2_PRIVATE_KEY" | base64 -w0)
           terraform apply -auto-approve
